@@ -1,0 +1,37 @@
+package model.statements;
+
+import model.adt.*;
+import model.state.PrgState;
+import model.value.IValue;
+import model.value.StringValue;
+
+import java.io.BufferedReader;
+
+public class ForkStatement implements IStatement {
+    private IStatement statement;
+
+    public ForkStatement(IStatement statement) {
+        this.statement = statement;
+    }
+
+    @Override
+    public PrgState execute(PrgState state) throws Exception {
+        MyIStack<IStatement> newExeStack = new MyStack<>();
+        MyIDictionary<String, IValue> newSymTable = state.getSymTable().deepCopy();
+        MyIList<IValue> output = state.getOutput();
+        MyIDictionary<StringValue, BufferedReader> fileTable = state.getFileTable();
+        MyIHeap heap = state.getHeap();
+
+        return new PrgState(newSymTable, newExeStack, output, statement, fileTable, heap);
+    }
+
+    @Override
+    public IStatement deepCopy() {
+        return new ForkStatement(statement.deepCopy());
+    }
+
+    @Override
+    public String toString() {
+        return "fork(" + statement.toString() + ")";
+    }
+}
