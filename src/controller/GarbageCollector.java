@@ -11,8 +11,16 @@ import java.util.stream.Collectors;
 
 public class GarbageCollector {
 
-    public static Map<Integer, IValue> conservativeGarbageCollector(List<Integer> symTableAddr, MyIHeap heap) {
-        return null;
+    public static Map<Integer, IValue> conservativeGarbageCollector(List<PrgState> prgList, MyIHeap heap) {
+
+        // Get all addresses from the symbol tables
+
+        List<Integer> symTableAddresses = prgList.stream()
+                .flatMap(prg -> getAddrFromSymTable(prg.getSymTable().getContent().values()).stream())
+                .collect(Collectors.toList());
+
+        return safeGarbageCollector(symTableAddresses, heap);
+
     }
 
     public static Map<Integer, IValue> unsafeGarbageCollector(List<Integer> symTableAddr, MyIHeap heap) {
@@ -36,7 +44,7 @@ public class GarbageCollector {
             }
         } while (newAddressesFound);
 
-        System.out.println("Collected addresses: " + addresses);
+        //System.out.println("Collected addresses: " + addresses);
 
         Map<Integer, IValue> result = new HashMap<>();
         for (Map.Entry<Integer, IValue> entry : heap.getMap().entrySet()) {

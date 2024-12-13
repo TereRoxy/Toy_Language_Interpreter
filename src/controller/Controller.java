@@ -1,10 +1,14 @@
 package controller;
 
 import exception.RepoException;
+import model.adt.MyIHeap;
 import model.state.PrgState;
+import model.value.IValue;
 import repository.IRepo;
+import controller.GarbageCollector;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,6 +71,9 @@ public class Controller implements IController{
         List<PrgState> prgList = removeCompletedPrg(repo.getProgramList());
         while(!prgList.isEmpty()){
             //call the conservative garbage collector
+            MyIHeap sharedHeap = prgList.getFirst().getHeap(); //the heap is shared between all program states
+            Map<Integer, IValue> newHeapContent = GarbageCollector.conservativeGarbageCollector(prgList, sharedHeap);
+            prgList.forEach(prg -> prg.getHeap().setContent(newHeapContent)); // update the heap for all program states
 
             oneStepForAllPrg(prgList);
             //remove the completed programs

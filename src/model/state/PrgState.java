@@ -52,7 +52,8 @@ public class PrgState {
 
     //toString
     public String toString() {
-        return "ExeStack: \n" + exeStack.toString() + "\n" +
+        return "Id: " + id + "\n" +
+                "ExeStack: \n" + exeStack.toString() + "\n" +
                 "SymTable: \n" + symTable.toString() + "\n" +
                 "Out: \n" + output.toString() + "\n" +
                 "FileTable: \n" + fileTableToString() + "\n" +

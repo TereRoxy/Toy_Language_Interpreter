@@ -29,19 +29,13 @@ public class InterpreterVar {
         PrgState prg2 = inputProgram(exampleProgram2());
         //Example program: int a;int b; a=2+3*5;b=a+1;Print(b)
         PrgState prg3 = inputProgram(exampleProgram3());
-        //string varf;
-        //varf="test.in";
-        //openRFile(varf);
-        //int varc;
-        //readFile(varf,varc);print(varc);
-        //readFile(varf,varc);print(varc)
-        //closeRFile(varf)
         PrgState prg4 = inputProgram(fileExample());
         PrgState prg5 = inputProgram(heapReadExample());
         PrgState prg6 = inputProgram(heapWriteExample());
         PrgState prg7 = inputProgram(heapAllocExample());
         PrgState prg8 = inputProgram(garbageCollectorExample());
         PrgState prg9 = inputProgram(whileExample());
+        PrgState prg10 = inputProgram(forkExample());
 
         //Create the repository
         IRepo repo1 = new Repo(prg1, "log1.txt");
@@ -53,6 +47,7 @@ public class InterpreterVar {
         IRepo repo7 = new Repo(prg7, "log7.txt");
         IRepo repo8 = new Repo(prg8, "log8.txt");
         IRepo repo9 = new Repo(prg9, "log9.txt");
+        IRepo repo10 = new Repo(prg10, "log10.txt");
 
 
         IController ctrl1 = new Controller(repo1);
@@ -64,6 +59,7 @@ public class InterpreterVar {
         IController ctrl7 = new Controller(repo7);
         IController ctrl8 = new Controller(repo8);
         IController ctrl9 = new Controller(repo9);
+        IController ctrl10 = new Controller(repo10);
 
         boolean oneStep = false;
 
@@ -78,6 +74,7 @@ public class InterpreterVar {
         menu.addCommand(new RunExample("7", heapAllocExample().toString(), ctrl7, oneStep));
         menu.addCommand(new RunExample("8", garbageCollectorExample().toString(), ctrl8, oneStep));
         menu.addCommand(new RunExample("9", whileExample().toString(), ctrl9, oneStep));
+        menu.addCommand(new RunExample("10", forkExample().toString(), ctrl10, oneStep));
 
         menu.show();
 
@@ -90,6 +87,42 @@ public class InterpreterVar {
         MyIList<IValue> out = new MyList<>();
         MyIDictionary<StringValue, BufferedReader> fileTable = new MyDictionary<>();
         return new PrgState(symTable, stack, out, ex, fileTable, new MyHeap());
+    }
+
+    //int v; Ref int a; v=10;new(a,22);
+    //fork(wH(a,30);v=32;print(v);print(rH(a)));
+    //print(v);print(rH(a))
+    private static CompoundStatement forkExample() {
+        return new CompoundStatement(
+                new VariableDecStatement("v", new IntType()),
+                new CompoundStatement(
+                        new VariableDecStatement("a", new RefType(new IntType())),
+                        new CompoundStatement(
+                                new AssignStatement("v", new ValueExpression(new IntValue(10))),
+                                new CompoundStatement(
+                                        new HeapAllocStatement("a", new ValueExpression(new IntValue(22))),
+                                        new CompoundStatement(
+                                                new ForkStatement(
+                                                        new CompoundStatement(
+                                                                new WriteHeapStatement("a", new ValueExpression(new IntValue(30))),
+                                                                new CompoundStatement(
+                                                                        new AssignStatement("v", new ValueExpression(new IntValue(32))),
+                                                                                new CompoundStatement(
+                                                                                        new PrintStatement(new VariableExpression("v")),
+                                                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("a")))
+                                                                                )
+                                                                        )
+                                                                )
+                                                        ) ,
+                                                new CompoundStatement(
+                                                        new PrintStatement(new VariableExpression("v")),
+                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("a")))
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
     // Example program: int v; v=2; Print(v)

@@ -28,7 +28,7 @@ public class RunExample extends Command {
                 run.run();
             }
             if (execOneStep){
-                controller.oneStepWrapper();
+                controller.oneStepForAllPrg(controller.getRepo().getProgramList());
             }
             else{
                 controller.allStep();
