@@ -1,6 +1,8 @@
 package model.statements;
 
 import exception.StatementException;
+import exception.TypeException;
+import model.adt.MyIDictionary;
 import model.expressions.IExpression;
 import model.state.PrgState;
 import model.types.IType;
@@ -45,6 +47,19 @@ public class HeapAllocStatement implements IStatement{
     @Override
     public IStatement deepCopy() {
         return new HeapAllocStatement(variable, expr);
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        IType typeVar = typeEnv.getValue(variable);
+        IType typeExpr = expr.typecheck(typeEnv);
+
+        if (typeVar.equals(new RefType(typeExpr))){
+            return typeEnv;
+        }
+        else {
+            throw new TypeException("HeapAllocStatement: right hand side and left hand side have different types");
+        }
     }
 
     @Override

@@ -3,9 +3,11 @@ package model.statements;
 import exception.ADTException;
 import exception.ExpressionException;
 import exception.KeyNotFoundException;
+import model.adt.MyIDictionary;
 import model.expressions.IExpression;
 import model.state.PrgState;
 import model.statements.IStatement;
+import model.types.IType;
 import model.value.IValue;
 
 public class PrintStatement implements IStatement {
@@ -30,5 +32,11 @@ public class PrintStatement implements IStatement {
     @Override
     public IStatement deepCopy() {
         return new PrintStatement(expression.deepCopy());
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        expression.typecheck(typeEnv);
+        return typeEnv;
     }
 }

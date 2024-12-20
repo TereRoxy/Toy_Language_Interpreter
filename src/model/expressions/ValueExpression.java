@@ -4,8 +4,8 @@ import exception.ADTException;
 import exception.ExpressionException;
 import exception.KeyNotFoundException;
 import model.adt.MyIHeap;
-import model.expressions.IExpression;
 import model.adt.MyIDictionary;
+import model.types.IType;
 import model.value.IValue;
 
 public class ValueExpression implements IExpression {
@@ -23,6 +23,11 @@ public class ValueExpression implements IExpression {
     @Override
     public IExpression deepCopy() {
         return new ValueExpression(value);
+    }
+
+    @Override
+    public IType typecheck(MyIDictionary<String, IType> typeEnv) {
+        return value.getType();
     }
 
     @Override

@@ -5,7 +5,6 @@ import model.adt.MyIHeap;
 import model.state.PrgState;
 import model.value.IValue;
 import repository.IRepo;
-import controller.GarbageCollector;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,16 @@ public class Controller implements IController{
 
     public Controller(IRepo r){
         this.repo = r;
+    }
+
+    public void initializeExecutor(){
+        executor = Executors.newFixedThreadPool(2);
+    }
+
+    public void closeExecutor(){
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdownNow();
+        }
     }
 
     public void oneStepForAllPrg(List<PrgState> prgList) throws RuntimeException, InterruptedException {

@@ -1,12 +1,10 @@
 package model.statements;
 
-import exception.ADTException;
-import exception.ExpressionException;
-import exception.KeyNotFoundException;
-import exception.StatementException;
+import exception.*;
 import model.adt.MyIDictionary;
 import model.expressions.IExpression;
 import model.state.PrgState;
+import model.types.IType;
 import model.value.IValue;
 
 
@@ -38,6 +36,16 @@ public class AssignStatement implements IStatement {
     @Override
     public IStatement deepCopy() {
         return new AssignStatement(variableName, expression);
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        IType typeVar = typeEnv.getValue(variableName);
+        IType typeExp = expression.typecheck(typeEnv);
+        if (!typeVar.equals(typeExp)) {
+            throw new TypeException("Assignment: right hand side and left hand side have different types");
+        }
+        return typeEnv;
     }
 
     public String toString() {

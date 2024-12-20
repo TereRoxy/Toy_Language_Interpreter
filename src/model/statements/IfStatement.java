@@ -1,13 +1,11 @@
 package model.statements;
 
-import exception.ADTException;
-import exception.ExpressionException;
-import exception.KeyNotFoundException;
-import exception.StatementException;
+import exception.*;
+import model.adt.MyIDictionary;
 import model.expressions.IExpression;
 import model.state.PrgState;
-import model.statements.IStatement;
 import model.types.BoolType;
+import model.types.IType;
 import model.value.BoolValue;
 import model.value.IValue;
 
@@ -43,6 +41,18 @@ public class IfStatement implements IStatement{
     @Override
     public IStatement deepCopy() {
         return new IfStatement(expression.deepCopy(), thenS.deepCopy(), elseS.deepCopy());
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        IType typeExpression = expression.typecheck(typeEnv);
+        if (typeExpression.equals(new BoolType())){
+            thenS.typecheck(typeEnv.deepCopy());
+            elseS.typecheck(typeEnv.deepCopy());
+            return typeEnv;
+        } else {
+            throw new TypeException("The condition of IF has not the type bool");
+        }
     }
 
     public IStatement getThenS() {

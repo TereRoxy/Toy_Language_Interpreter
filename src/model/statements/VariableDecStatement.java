@@ -28,12 +28,18 @@ public class VariableDecStatement implements IStatement {
     @Override
     public String toString() {
         return "VariableDecStatement{" +
-                "name='" + name + '\'' +
+                "name='" + name + '\'' + ", type=" + type +
                 '}';
     }
 
     @Override
     public IStatement deepCopy() {
         return new VariableDecStatement(name, type);
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        typeEnv.insert(name, type);
+        return typeEnv;
     }
 }

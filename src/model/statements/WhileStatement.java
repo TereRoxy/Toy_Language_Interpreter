@@ -1,8 +1,11 @@
 package model.statements;
 
+import exception.TypeException;
+import model.adt.MyIDictionary;
 import model.adt.MyIStack;
 import model.expressions.IExpression;
 import model.state.PrgState;
+import model.types.IType;
 
 public class WhileStatement implements IStatement{
     IStatement statement;
@@ -25,6 +28,17 @@ public class WhileStatement implements IStatement{
     @Override
     public IStatement deepCopy() {
         return new WhileStatement(statement.deepCopy(), expression.deepCopy());
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        IType typeExpression = expression.typecheck(typeEnv);
+        if (typeExpression.equals(expression.typecheck(typeEnv))){
+            return typeEnv;
+        }
+        else{
+            throw new TypeException("The condition of while is not a boolean");
+        }
     }
 
     @Override

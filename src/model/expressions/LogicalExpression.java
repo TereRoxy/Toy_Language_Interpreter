@@ -2,8 +2,8 @@ package model.expressions;
 
 import exception.ExpressionException;
 import model.adt.MyIHeap;
-import model.expressions.IExpression;
 import model.types.BoolType;
+import model.types.IType;
 import model.value.BoolValue;
 import model.value.IValue;
 import exception.ADTException;
@@ -46,6 +46,23 @@ public class LogicalExpression implements IExpression{
     @Override
     public IExpression deepCopy() {
         return new LogicalExpression(left.deepCopy(), operator, right.deepCopy());
+    }
+
+    @Override
+    public IType typecheck(MyIDictionary<String, IType> typeEnv) throws KeyNotFoundException, ExpressionException {
+        IType type1, type2;
+        type1 = left.typecheck(typeEnv);
+        type2 = right.typecheck(typeEnv);
+
+        if (type1.equals(new BoolType())) {
+            if (type2.equals(new BoolType())) {
+                return new BoolType();
+            } else {
+                throw new ExpressionException("Second operand is not a BoolType");
+            }
+        } else {
+            throw new ExpressionException("First operand is not a BoolType");
+        }
     }
 
     public String toString() {

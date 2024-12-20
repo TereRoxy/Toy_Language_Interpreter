@@ -5,6 +5,7 @@ import exception.ExpressionException;
 import exception.KeyNotFoundException;
 import model.adt.MyIDictionary;
 import model.adt.MyIHeap;
+import model.types.IType;
 import model.types.IntType;
 import model.value.BoolValue;
 import model.value.IValue;
@@ -79,6 +80,21 @@ public class RelationalExpression implements IExpression{
     @Override
     public IExpression deepCopy() {
         return new RelationalExpression(left.deepCopy(), right.deepCopy(), operator);
+    }
+
+    @Override
+    public IType typecheck(MyIDictionary<String, IType> typeEnv) throws KeyNotFoundException, ExpressionException {
+        IType leftType = left.typecheck(typeEnv);
+        IType rightType = right.typecheck(typeEnv);
+
+        if( !leftType.equals(new IntType()) ){
+            throw new ExpressionException("Left operand is not an integer");
+        }
+        if( !rightType.equals(new IntType()) ){
+            throw new ExpressionException("Right operand is not an integer");
+        }
+
+        return new IntType();
     }
 
     @Override

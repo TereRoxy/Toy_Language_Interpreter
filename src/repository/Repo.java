@@ -18,8 +18,18 @@ public class Repo implements IRepo{
 
     public Repo(PrgState initialState,  String filename) {
         this.filename = filename;
+
+        //clear the log file
+        try{
+            PrintWriter logFile = new PrintWriter(new BufferedWriter( new FileWriter(this.filename, false)) );
+            logFile.close();
+        }catch (IOException e){
+            System.out.println("File does not exist");
+        }
+
         this.prgStateList = new ArrayList<PrgState>();
-        this.prgStateList.add(initialState);
+        if (initialState != null)
+            this.prgStateList.add(initialState);
         this.currentIndex = 0;
     }
 

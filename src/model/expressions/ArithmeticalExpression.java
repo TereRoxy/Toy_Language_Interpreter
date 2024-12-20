@@ -6,6 +6,7 @@ import exception.KeyNotFoundException;
 import model.adt.MyIDictionary;
 import model.adt.MyIHeap;
 import model.expressions.IExpression;
+import model.types.IType;
 import model.types.IntType;
 import model.value.IValue;
 import model.value.IntValue;
@@ -58,7 +59,24 @@ public class ArithmeticalExpression implements IExpression{
         return new ArithmeticalExpression(left.deepCopy(), right.deepCopy(), operator);
     }
 
+    @Override
+    public IType typecheck(MyIDictionary<String, IType> typeEnv) throws KeyNotFoundException, ExpressionException {
+        IType leftType = left.typecheck(typeEnv);
+        IType rightType = right.typecheck(typeEnv);
+
+        if( !leftType.equals(new IntType()) ){
+            throw new ExpressionException("Left operand is not an integer");
+        }
+        if( !rightType.equals(new IntType()) ){
+            throw new ExpressionException("Right operand is not an integer");
+        }
+
+        return new IntType();
+    }
+
     public String toString() {
         return left.toString() + " " + operator + " " + right.toString();
     }
+
+
 }

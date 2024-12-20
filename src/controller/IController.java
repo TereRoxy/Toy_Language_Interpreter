@@ -17,4 +17,7 @@ public interface IController {
 //    void oneStepWrapper() throws Exception;
     List<PrgState> removeCompletedPrg(List<PrgState> inPrgList);
     void oneStepForAllPrg(List<PrgState> prgList) throws RuntimeException, InterruptedException;
+
+    void initializeExecutor();
+    void closeExecutor();
 }

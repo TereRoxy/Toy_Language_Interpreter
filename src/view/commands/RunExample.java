@@ -1,12 +1,16 @@
 package view.commands;
 
 import controller.IController;
+import model.statements.IStatement;
+import view.OneStepMenu;
+
+import java.util.function.Supplier;
 
 public class RunExample extends Command {
 
     private IController controller;
     private boolean execOneStep;
-    private Runnable run;
+    private Supplier<IStatement> programSupplier = null;
 
     public RunExample(String key, String description, IController controller, boolean execOneStep) {
         super(key, description);
@@ -14,21 +18,18 @@ public class RunExample extends Command {
         this.execOneStep = execOneStep;
     }
 
-    public RunExample(String key, String description, Runnable run, IController controller, boolean execOneStep){
-        super(key, description);
-        this.execOneStep = execOneStep;
-        this.run = run;
-        this.controller = controller;
-    }
-
     @Override
     public void execute() {
         try {
-            if (run != null) {
-                run.run();
-            }
             if (execOneStep){
-                controller.oneStepForAllPrg(controller.getRepo().getProgramList());
+                controller.initializeExecutor();
+
+                OneStepMenu nextInstruction = new OneStepMenu();
+                nextInstruction.addCommand(new ExecNextStep("1", "Execute next step", controller));
+                nextInstruction.addCommand(new ExitCommand("0", "Exit"));
+                nextInstruction.show();
+
+                controller.closeExecutor();
             }
             else{
                 controller.allStep();
@@ -45,5 +46,4 @@ public class RunExample extends Command {
     public IController getController() {
         return controller;
     }
-
 }

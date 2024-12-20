@@ -2,6 +2,7 @@ package model.statements;
 
 import model.adt.*;
 import model.state.PrgState;
+import model.types.IType;
 import model.value.IValue;
 import model.value.StringValue;
 
@@ -28,6 +29,11 @@ public class ForkStatement implements IStatement {
     @Override
     public IStatement deepCopy() {
         return new ForkStatement(statement.deepCopy());
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        return statement.typecheck(typeEnv);
     }
 
     @Override

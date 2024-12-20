@@ -1,11 +1,10 @@
 package model.statements;
 
-import exception.ADTException;
-import exception.ExpressionException;
-import exception.KeyNotFoundException;
-import exception.StatementException;
+import exception.*;
+import model.adt.MyIDictionary;
 import model.expressions.IExpression;
 import model.state.PrgState;
+import model.types.IType;
 import model.types.IntType;
 import model.types.StringType;
 import model.value.IntValue;
@@ -59,6 +58,16 @@ public class ReadFileStatement implements IStatement{
     @Override
     public IStatement deepCopy() {
         return new ReadFileStatement(exp.deepCopy(), varName);
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        IType type = exp.typecheck(typeEnv);
+        if (type.equals(new StringType())) {
+            return typeEnv;
+        } else {
+            throw new TypeException("Expression is not of type String.");
+        }
     }
 
     public String toString(){

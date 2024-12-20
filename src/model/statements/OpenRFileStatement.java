@@ -1,9 +1,11 @@
 package model.statements;
 
 import exception.StatementException;
+import exception.TypeException;
 import model.adt.MyIDictionary;
 import model.expressions.IExpression;
 import model.state.PrgState;
+import model.types.IType;
 import model.types.StringType;
 import model.value.IValue;
 import model.value.StringValue;
@@ -47,6 +49,16 @@ public class OpenRFileStatement implements IStatement {
     @Override
     public IStatement deepCopy() {
         return new OpenRFileStatement(exp.deepCopy());
+    }
+
+    @Override
+    public MyIDictionary<String, IType> typecheck(MyIDictionary<String, IType> typeEnv) throws Exception {
+        IType type = exp.typecheck(typeEnv);
+        if (type.equals(new StringType())) {
+            return typeEnv;
+        } else {
+            throw new TypeException("Expression is not of type String.");
+        }
     }
 
     @Override
