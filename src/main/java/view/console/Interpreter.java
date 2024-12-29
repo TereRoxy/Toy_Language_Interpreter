@@ -57,6 +57,8 @@ public class Interpreter {
             }
         }
         menu.show();
+
+        //mark graceful exit
         System.out.println("Program finished");
 
     }
