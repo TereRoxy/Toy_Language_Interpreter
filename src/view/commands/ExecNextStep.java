@@ -12,11 +12,14 @@ public class ExecNextStep extends Command {
     }
 
     @Override
-    public void execute() {
-        try {
+    public void execute() throws Exception {
+        if (controller.areProgramsFinished()) {
+            throw new CompletedProgramException("All programs have finished executing");
+        }
+        try{
             controller.oneStepForAllPrg(controller.getRepo().getProgramList());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 }

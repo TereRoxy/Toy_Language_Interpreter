@@ -116,6 +116,18 @@ public class Controller implements IController{
                 .collect(Collectors.toList());
     }
 
+    public boolean areProgramsFinished(){
+        List<PrgState> prgList = removeCompletedPrg(repo.getProgramList());
+        if(!prgList.isEmpty()){
+            //call the conservative garbage collector
+            MyIHeap sharedHeap = prgList.getFirst().getHeap(); //the heap is shared between all program states
+            Map<Integer, IValue> newHeapContent = GarbageCollector.conservativeGarbageCollector(prgList, sharedHeap);
+            prgList.forEach(prg -> prg.getHeap().setContent(newHeapContent)); // update the heap for all program states
+            return false;
+        }
+        return true;
+    }
+
     //    public void displayState() throws Exception {
 //        PrgState prg = repo.getCurrentProgram();
 //        System.out.println(prg);

@@ -20,4 +20,6 @@ public interface IController {
 
     void initializeExecutor();
     void closeExecutor();
+
+    boolean areProgramsFinished();
 }

@@ -37,7 +37,11 @@ public class TextMenu {
                 continue;
             }
             running = false;
-            command.execute();
+            try {
+                command.execute();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 }

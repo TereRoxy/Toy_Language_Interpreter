@@ -1,5 +1,6 @@
 package view;
 
+import exception.CompletedProgramException;
 import view.commands.Command;
 
 import java.util.Scanner;
@@ -22,8 +23,11 @@ public class OneStepMenu extends TextMenu {
                 System.out.println("Invalid option");
                 continue;
             }
-            try{
+            try {
                 command.execute();
+            }catch (CompletedProgramException e){
+                System.out.println("All program threads have finished executing");
+                running = false;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 running = false;
