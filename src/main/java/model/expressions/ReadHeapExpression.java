@@ -46,6 +46,6 @@ public class ReadHeapExpression implements IExpression {
 
     @Override
     public String toString() {
-        return "ReadHeap(" + expression.toString() + ")";
+        return "rH(" + expression.toString() + ")";
     }
 }
