@@ -24,7 +24,7 @@ public class ReadHeapExpression implements IExpression {
             throw new ExpressionException("Expression is not of RefType");
         }
         int address = ((RefValue) value).getAddress();
-        if (heap.contains(address)) {
+        if (!heap.contains(address)) {
             throw new KeyNotFoundException("Address not found in heap");
         }
         return heap.getValue(address);
