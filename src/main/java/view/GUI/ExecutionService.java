@@ -27,7 +27,9 @@ public class ExecutionService {
             controller.closeExecutor();
             throw new CompletedProgramException("All programs have finished executing");
         }
-        controller.oneStepForAllPrg(controller.getRepo().getProgramList());
+        else {
+            controller.oneStepForAllPrg(controller.getRepo().getProgramList());
+        }
     }
 
     public void runAll() throws Exception {

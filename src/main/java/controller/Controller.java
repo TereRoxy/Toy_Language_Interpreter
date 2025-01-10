@@ -123,6 +123,8 @@ public class Controller implements IController{
             MyIHeap sharedHeap = prgList.getFirst().getHeap(); //the heap is shared between all program states
             Map<Integer, IValue> newHeapContent = GarbageCollector.conservativeGarbageCollector(prgList, sharedHeap);
             prgList.forEach(prg -> prg.getHeap().setContent(newHeapContent)); // update the heap for all program states
+            //update the repository state
+            repo.setProgramList(prgList);
             return false;
         }
         return true;

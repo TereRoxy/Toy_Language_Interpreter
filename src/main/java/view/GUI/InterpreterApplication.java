@@ -26,7 +26,7 @@ public class InterpreterApplication extends Application {
         ProgramRepo examplesRepo = new ProgramRepo();
 
         FXMLLoader fxmlLoader = new FXMLLoader(InterpreterApplication.class.getResource(SELECT_PROGRAM_VIEW));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
         // Get the controller and set the ProgramRepo
         SelectProgramWindow selectProgram = fxmlLoader.getController();

@@ -15,6 +15,8 @@ import model.value.StringValue;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class MainWindow {
     @FXML
@@ -128,15 +130,8 @@ public class MainWindow {
                 prgStateLView.getItems().add(prgState)
         );
 
-        // Update the symbol table
-        currentState.getSymTable().getContent().forEach((variableName, value) ->
-                symTableTView.getItems().add(new SymTableEntry(variableName, value.toString()))
-        );
-
-        // Update the execution stack list view
-        currentState.getExeStack().getContent().forEach(statement ->
-                exeStackLView.getItems().add(statement)
-        );
+        //update the symbol table and the execution stack
+        refreshPrgState(currentState);
     }
 
     private void refreshPrgState(PrgState state){
@@ -148,9 +143,13 @@ public class MainWindow {
                 symTableTView.getItems().add(new SymTableEntry(variableName, value.toString()))
         );
 
-        state.getExeStack().getContent().forEach( (statement) ->
-                exeStackLView.getItems().add(statement)
-        );
+        // Add the items in reverse order using Stream API
+        state.getExeStack().getContent().stream()
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    Collections.reverse(list);
+                    return list.stream();
+                }))
+                .forEach(statement -> exeStackLView.getItems().add(statement));
     }
 
     private void clearAll() {
@@ -199,6 +198,7 @@ public class MainWindow {
         alert.setTitle("Error");
         alert.setHeaderText("An error occurred");
         alert.setContentText(message);
+        System.out.println(message);
         alert.showAndWait();
     }
 }
