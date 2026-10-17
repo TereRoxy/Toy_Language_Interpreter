@@ -35,7 +35,7 @@ public class WriteHeapStatement implements IStatement {
         }
 
         int address = ((RefValue) varValue).getAddress();
-        if (heap.contains(address)) {
+        if (!heap.contains(address)) {
             throw new StatementException("Address not found in heap");
         }
 
@@ -67,6 +67,6 @@ public class WriteHeapStatement implements IStatement {
 
     @Override
     public String toString() {
-        return "WriteHeap(" + varName + ", " + expression.toString() + ")";
+        return "wH(" + varName + ", " + expression.toString() + ")";
     }
 }

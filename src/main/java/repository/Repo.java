@@ -39,6 +39,11 @@ public class Repo implements IRepo{
     }
 
     @Override
+    public int getSize() {
+        return this.prgStateList.size();
+    }
+
+    @Override
     public List<PrgState> getProgramList() {
         return this.prgStateList;
     }

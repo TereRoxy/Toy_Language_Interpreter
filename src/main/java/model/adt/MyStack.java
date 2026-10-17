@@ -1,6 +1,8 @@
 package model.adt;
 
 import exception.EmptyStackException;
+
+import java.util.List;
 import java.util.Stack;
 
 public class MyStack <T> implements MyIStack<T> {
@@ -54,6 +56,11 @@ public class MyStack <T> implements MyIStack<T> {
             throw new RuntimeException(exception.getMessage());
         }
         return answer.toString();
+    }
+
+    @Override
+    public List<T> getContent() {
+        return this.stack;
     }
 }
 

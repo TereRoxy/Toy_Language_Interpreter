@@ -27,7 +27,7 @@ public class VariableDecStatement implements IStatement {
 
     @Override
     public String toString() {
-        return "VariableDecStatement{" +
+        return "DeclVar{" +
                 "name='" + name + '\'' + ", type=" + type +
                 '}';
     }

@@ -14,4 +14,5 @@ public interface IRepo {
     void addPrgState(PrgState state);
     void logPrgStateExec(PrgState state) throws RepoException;
     boolean isEmpty();
+    int getSize();
 }
